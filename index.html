@@ -3,23 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tools TAPHOA</title>
+    <title>Tools TAPHOA - Công Cụ Hữu Ích</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
-            text-align: center;
+            background-color: #f5f5f5;
         }
-        h1 {
-            color: #2c3e50;
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .tool-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .calculator {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        .calculator button {
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #e9ecef;
+        }
+        .calculator button:hover {
+            background-color: #dee2e6;
+        }
+        #display {
+            grid-column: span 4;
+            padding: 15px;
+            font-size: 20px;
+            text-align: right;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>🚀 Chào mừng đến với Tools TAPHOA!</h1>
-    <p>Trang web đang được phát triển...</p>
-    <p>Last updated: 2025</p>
+    <div class="header">
+        <h1>🚀 Tools TAPHOA</h1>
+        <p>Công cụ hữu ích cho mọi người</p>
+    </div>
+
+    <!-- Máy Tính Cơ Bản -->
+    <div class="tool-section">
+        <h2>🧮 Máy Tính Cơ Bản</h2>
+        <div class="calculator">
+            <input type="text" id="display" readonly>
+            <button onclick="clearDisplay()">C</button>
+            <button onclick="deleteLast()">⌫</button>
+            <button onclick="appendToDisplay('%')">%</button>
+            <button onclick="appendToDisplay('/')">/</button>
+            
+            <button onclick="appendToDisplay('7')">7</button>
+            <button onclick="appendToDisplay('8')">8</button>
+            <button onclick="appendToDisplay('9')">9</button>
+            <button onclick="appendToDisplay('*')">×</button>
+            
+            <button onclick="appendToDisplay('4')">4</button>
+            <button onclick="appendToDisplay('5')">5</button>
+            <button onclick="appendToDisplay('6')">6</button>
+            <button onclick="appendToDisplay('-')">-</button>
+            
+            <button onclick="appendToDisplay('1')">1</button>
+            <button onclick="appendToDisplay('2')">2</button>
+            <button onclick="appendToDisplay('3')">3</button>
+            <button onclick="appendToDisplay('+')">+</button>
+            
+            <button onclick="appendToDisplay('0')">0</button>
+            <button onclick="appendToDisplay('.')">.</button>
+            <button onclick="calculateResult()" style="grid-column: span 2;">=</button>
+        </div>
+    </div>
+
+    <!-- Công Cụ Chuyển Đổi Tiền Tệ -->
+    <div class="tool-section">
+        <h2>💵 Chuyển Đổi Tiền Tệ (USD ↔ VND)</h2>
+        <div>
+            <input type="number" id="usdAmount" placeholder="Nhập USD" oninput="convertCurrency()">
+            <span> USD = </span>
+            <span id="vndResult">0 VND</span>
+        </div>
+        <div style="margin-top: 10px;">
+            <input type="number" id="vndAmount" placeholder="Nhập VND" oninput="convertCurrency()">
+            <span> VND = </span>
+            <span id="usdResult">0 USD</span>
+        </div>
+    </div>
+
+    <!-- Danh Sách Công Cụ Sắp Tới -->
+    <div class="tool-section">
+        <h2>📋 Công Cụ Sắp Ra Mắt</h2>
+        <ul>
+            <li>🔄 Chuyển đổi đơn vị đo lường</li>
+            <li>🎲 Random number generator</li>
+            <li>📝 Quản lý công việc</li>
+            <li>🕒 Đếm ngược thời gian</li>
+        </ul>
+    </div>
+
+    <footer style="text-align: center; margin-top: 40px; color: #666;">
+        <p>Last updated: 2025 | Tools TAPHOA - Phát triển bởi cộng đồng</p>
+    </footer>
+
+    <script>
+        // Máy tính
+        function appendToDisplay(value) {
+            document.getElementById('display').value += value;
+        }
+        
+        function clearDisplay() {
+            document.getElementById('display').value = '';
+        }
+        
+        function deleteLast() {
+            let display = document.getElementById('display');
+            display.value = display.value.slice(0, -1);
+        }
+        
+        function calculateResult() {
+            try {
+                let display = document.getElementById('display');
+                display.value = eval(display.value);
+            } catch (error) {
+                display.value = 'Lỗi';
+            }
+        }
+
+        // Chuyển đổi tiền tệ
+        function convertCurrency() {
+            const exchangeRate = 23000; // Tỷ giá mặc định
+            
+            // USD to VND
+            const usdInput = document.getElementById('usdAmount').value;
+            if (usdInput) {
+                document.getElementById('vndResult').textContent = 
+                    (usdInput * exchangeRate).toLocaleString() + ' VND';
+            }
+            
+            // VND to USD
+            const vndInput = document.getElementById('vndAmount').value;
+            if (vndInput) {
+                document.getElementById('usdResult').textContent = 
+                    (vndInput / exchangeRate).toFixed(2) + ' USD';
+            }
+        }
+    </script>
 </body>
 </html>
