@@ -3,168 +3,330 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tools TAPHOA - Công Cụ Hữu Ích</title>
+    <title>Tools TAPHOA - AI Video & Image Tools</title>
     <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+        }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
         }
+        
         .header {
             text-align: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: white;
-            padding: 30px;
-            border-radius: 10px;
+            padding: 40px 20px;
+            border-radius: 15px;
             margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
+        
         .tool-section {
             background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .tool-section h2 {
+            color: var(--primary);
             margin-bottom: 20px;
-        }
-        .calculator {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            display: flex;
+            align-items: center;
             gap: 10px;
-            max-width: 300px;
-            margin: 0 auto;
         }
-        .calculator button {
-            padding: 15px;
-            font-size: 18px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: #e9ecef;
+        
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
         }
-        .calculator button:hover {
-            background-color: #dee2e6;
+        
+        .platform-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
         }
-        #display {
-            grid-column: span 4;
-            padding: 15px;
-            font-size: 20px;
-            text-align: right;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        
+        .platform-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .platform-card h3 {
+            color: var(--primary);
             margin-bottom: 10px;
+        }
+        
+        .platform-features {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+        }
+        
+        .platform-features li {
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .platform-features li:before {
+            content: "✓ ";
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        }
+        
+        .feature-tag {
+            background: var(--success);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        .note {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>🚀 Tools TAPHOA</h1>
-        <p>Công cụ hữu ích cho mọi người</p>
+        <h1>🚀 Tools TAPHOA - AI Video & Image Tools</h1>
+        <p>Công cụ AI miễn phí cho sáng tạo nội dung đa phương tiện</p>
     </div>
 
-    <!-- Máy Tính Cơ Bản -->
+    <!-- Tính năng 1: Tạo prompt từ video -->
     <div class="tool-section">
-        <h2>🧮 Máy Tính Cơ Bản</h2>
-        <div class="calculator">
-            <input type="text" id="display" readonly>
-            <button onclick="clearDisplay()">C</button>
-            <button onclick="deleteLast()">⌫</button>
-            <button onclick="appendToDisplay('%')">%</button>
-            <button onclick="appendToDisplay('/')">/</button>
+        <h2>🎬 Tạo Prompt Từ Video</h2>
+        <p>Chuyển đổi video thành mô tả văn bản chi tiết để tái sử dụng</p>
+        
+        <div class="platform-grid">
+            <div class="platform-card">
+                <h3>Google AI Audio <span class="feature-tag">Miễn phí</span></h3>
+                <ul class="platform-features">
+                    <li>Nhận diện giọng nói từ video</li>
+                    <li>Tạo transcript tự động</li>
+                    <li>Hỗ trợ nhiều ngôn ngữ</li>
+                    <li>Độ chính xác cao</li>
+                </ul>
+                <a href="https://aiaudio.google/" class="btn" target="_blank">Truy cập Google AI Audio</a>
+            </div>
             
-            <button onclick="appendToDisplay('7')">7</button>
-            <button onclick="appendToDisplay('8')">8</button>
-            <button onclick="appendToDisplay('9')">9</button>
-            <button onclick="appendToDisplay('*')">×</button>
-            
-            <button onclick="appendToDisplay('4')">4</button>
-            <button onclick="appendToDisplay('5')">5</button>
-            <button onclick="appendToDisplay('6')">6</button>
-            <button onclick="appendToDisplay('-')">-</button>
-            
-            <button onclick="appendToDisplay('1')">1</button>
-            <button onclick="appendToDisplay('2')">2</button>
-            <button onclick="appendToDisplay('3')">3</button>
-            <button onclick="appendToDisplay('+')">+</button>
-            
-            <button onclick="appendToDisplay('0')">0</button>
-            <button onclick="appendToDisplay('.')">.</button>
-            <button onclick="calculateResult()" style="grid-column: span 2;">=</button>
+            <div class="platform-card">
+                <h3>YouTube Transcript <span class="feature-tag">Miễn phí</span></h3>
+                <ul class="platform-features">
+                    <li>Trích xuất phụ đề YouTube</li>
+                    <li>Chuyển đổi thành văn bản</li>
+                    <li>Xuất file TXT/PDF</li>
+                    <li>Không cần đăng nhập</li>
+                </ul>
+                <a href="https://youtubetranscript.com/" class="btn" target="_blank">Truy cập YouTube Transcript</a>
+            </div>
+        </div>
+        
+        <div class="note">
+            <strong>💡 Hướng dẫn sử dụng:</strong>
+            <ol>
+                <li>Tải video lên Google AI Audio để trích xuất âm thanh</li>
+                <li>Sao chép transcript và chỉnh sửa thành prompt</li>
+                <li>Sử dụng prompt cho các công cụ AI khác</li>
+            </ol>
         </div>
     </div>
 
-    <!-- Công Cụ Chuyển Đổi Tiền Tệ -->
+    <!-- Tính năng 2: Tạo video từ ảnh và prompt -->
     <div class="tool-section">
-        <h2>💵 Chuyển Đổi Tiền Tệ (USD ↔ VND)</h2>
-        <div>
-            <input type="number" id="usdAmount" placeholder="Nhập USD" oninput="convertCurrency()">
-            <span> USD = </span>
-            <span id="vndResult">0 VND</span>
+        <h2>🎨 Tạo Video Từ Ảnh & Prompt</h2>
+        <p>Biến hình ảnh và ý tưởng thành video sống động với AI</p>
+        
+        <div class="platform-grid">
+            <div class="platform-card">
+                <h3>DreamFace <span class="feature-tag">Miễn phí</span></h3>
+                <ul class="platform-features">
+                    <li>Tạo video từ ảnh khuôn mặt</li>
+                    <li>Điều khiển biểu cảm</li>
+                    <li>Hoạt ảnh mượt mà</li>
+                    <li>Xử lý real-time</li>
+                </ul>
+                <a href="https://dreamface.app/" class="btn" target="_blank">Truy cập DreamFace</a>
+            </div>
+            
+            <div class="platform-card">
+                <h3>Dreamia <span class="feature-tag">Miễn phí</span></h3>
+                <ul class="platform-features">
+                    <li>Tạo video từ text prompt</li>
+                    <li>Kết hợp hình ảnh có sẵn</li>
+                    <li>Hiệu ứng hình ảnh đa dạng</li>
+                    <li>Chất lượng HD</li>
+                </ul>
+                <a href="https://dreamia.ai/" class="btn" target="_blank">Truy cập Dreamia</a>
+            </div>
+            
+            <div class="platform-card">
+                <h3>Runway ML <span class="feature-tag">Free Tier</span></h3>
+                <ul class="platform-features">
+                    <li>125 credit miễn phí</li>
+                    <li>Gen-2 video generation</li>
+                    <li>Image to video conversion</li>
+                    <li>Nhiều template có sẵn</li>
+                </ul>
+                <a href="https://runwayml.com/" class="btn" target="_blank">Truy cập Runway</a>
+            </div>
         </div>
-        <div style="margin-top: 10px;">
-            <input type="number" id="vndAmount" placeholder="Nhập VND" oninput="convertCurrency()">
-            <span> VND = </span>
-            <span id="usdResult">0 USD</span>
+        
+        <div class="note">
+            <strong>🎯 Quy trình tạo video:</strong>
+            <ol>
+                <li>Chuẩn bị hình ảnh nguồn chất lượng cao</li>
+                <li>Viết prompt mô tả chi tiết video mong muốn</li>
+                <li>Chọn platform phù hợp và tải lên</li>
+                <li>Chỉnh sửa và tải video thành phẩm</li>
+            </ol>
         </div>
     </div>
 
-    <!-- Danh Sách Công Cụ Sắp Tới -->
+    <!-- Tính năng 3: Tạo nhép miệng cho nhân vật -->
     <div class="tool-section">
-        <h2>📋 Công Cụ Sắp Ra Mắt</h2>
-        <ul>
-            <li>🔄 Chuyển đổi đơn vị đo lường</li>
-            <li>🎲 Random number generator</li>
-            <li>📝 Quản lý công việc</li>
-            <li>🕒 Đếm ngược thời gian</li>
-        </ul>
+        <h2>👄 Tạo Nhép Miệng Cho Nhân Vật</h2>
+        <p>Đồng bộ hóa chuyển động môi với âm thanh cho nhân vật ảnh</p>
+        
+        <div class="platform-grid">
+            <div class="platform-card">
+                <h3>Wav2Lip <span class="feature-tag">Open Source</span></h3>
+                <ul class="platform-features">
+                    <li>Đồng bộ môi chính xác</li>
+                    <li>Chạy trên Google Colab free</li>
+                    <li>Hỗ trợ nhiều định dạng</li>
+                    <li>Chất lượng cao</li>
+                </ul>
+                <a href="https://github.com/Rudrabha/Wav2Lip" class="btn btn-secondary" target="_blank">GitHub Wav2Lip</a>
+                <a href="https://colab.research.google.com/github/justinjohn0306/Wav2Lip/blob/master/Wav2Lip.ipynb" class="btn" target="_blank">Chạy trên Colab</a>
+            </div>
+            
+            <div class="platform-card">
+                <h3>D-ID <span class="feature-tag">Free Credits</span></h3>
+                <ul class="platform-features">
+                    <li>20 credit miễn phí</li>
+                    <li>Giao diện kéo thả</li>
+                    <li>Xuất video chất lượng</li>
+                    <li>Dễ sử dụng</li>
+                </ul>
+                <a href="https://www.d-id.com/" class="btn" target="_blank">Truy cập D-ID</a>
+            </div>
+            
+            <div class="platform-card">
+                <h3>Sync Labs <span class="feature-tag">Miễn phí</span></h3>
+                <ul class="platform-features">
+                    <li>API miễn phí cho dự án nhỏ</li>
+                    <li>Xử lý real-time</li>
+                    <li>Integration dễ dàng</li>
+                    <li>Documentation đầy đủ</li>
+                </ul>
+                <a href="https://www.synclabs.so/" class="btn" target="_blank">Truy cập Sync Labs</a>
+            </div>
+        </div>
+        
+        <div class="note">
+            <strong>📝 Hướng dẫn Wav2Lip (Khuyến nghị):</strong>
+            <ol>
+                <li>Truy cập Google Colab link bên trên</li>
+                <li>Kết nối với GPU miễn phí</li>
+                <li>Tải lên video và audio cần đồng bộ</li>
+                <li>Chạy code và tải video kết quả</li>
+            </ol>
+        </div>
     </div>
 
-    <footer style="text-align: center; margin-top: 40px; color: #666;">
-        <p>Last updated: 2025 | Tools TAPHOA - Phát triển bởi cộng đồng</p>
+    <!-- Công cụ bổ trợ -->
+    <div class="tool-section">
+        <h2>🛠 Công Cụ Hỗ Trợ Bổ Sung</h2>
+        
+        <div class="platform-grid">
+            <div class="platform-card">
+                <h3>Canva <span class="feature-tag">Miễn phí</span></h3>
+                <p>Chỉnh sửa hình ảnh và tạo thumbnail</p>
+                <a href="https://canva.com" class="btn" target="_blank">Truy cập Canva</a>
+            </div>
+            
+            <div class="platform-card">
+                <h3>CapCut <span class="feature-tag">Miễn phí</span></h3>
+                <p>Biên tập video cơ bản</p>
+                <a href="https://capcut.com" class="btn" target="_blank">Truy cập CapCut</a>
+            </div>
+            
+            <div class="platform-card">
+                <h3>Remove.bg <span class="feature-tag">Miễn phí</span></h3>
+                <p>Xóa nền hình ảnh tự động</p>
+                <a href="https://remove.bg" class="btn" target="_blank">Truy cập Remove.bg</a>
+            </div>
+        </div>
+    </div>
+
+    <footer style="text-align: center; margin-top: 40px; color: #666; padding: 20px;">
+        <p><strong>Tools TAPHOA</strong> - Bộ công cụ AI miễn phí cho người sáng tạo nội dung</p>
+        <p>Last updated: 2025 | Liên kết đến các nền tảng AI uy tín</p>
     </footer>
 
     <script>
-        // Máy tính
-        function appendToDisplay(value) {
-            document.getElementById('display').value += value;
-        }
-        
-        function clearDisplay() {
-            document.getElementById('display').value = '';
-        }
-        
-        function deleteLast() {
-            let display = document.getElementById('display');
-            display.value = display.value.slice(0, -1);
-        }
-        
-        function calculateResult() {
-            try {
-                let display = document.getElementById('display');
-                display.value = eval(display.value);
-            } catch (error) {
-                display.value = 'Lỗi';
-            }
-        }
+        // Thêm hiệu ứng loading khi click vào nút
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (this.getAttribute('target') === '_blank') {
+                    this.innerHTML = '⏳ Đang chuyển hướng...';
+                    setTimeout(() => {
+                        this.innerHTML = this.textContent.replace('⏳ Đang chuyển hướng...', this.textContent);
+                    }, 2000);
+                }
+            });
+        });
 
-        // Chuyển đổi tiền tệ
-        function convertCurrency() {
-            const exchangeRate = 23000; // Tỷ giá mặc định
-            
-            // USD to VND
-            const usdInput = document.getElementById('usdAmount').value;
-            if (usdInput) {
-                document.getElementById('vndResult').textContent = 
-                    (usdInput * exchangeRate).toLocaleString() + ' VND';
-            }
-            
-            // VND to USD
-            const vndInput = document.getElementById('vndAmount').value;
-            if (vndInput) {
-                document.getElementById('usdResult').textContent = 
-                    (vndInput / exchangeRate).toFixed(2) + ' USD';
-            }
-        }
+        // Thêm tracking đơn giản
+        console.log('Tools TAPHOA - AI Video Tools đã sẵn sàng!');
     </script>
 </body>
 </html>
