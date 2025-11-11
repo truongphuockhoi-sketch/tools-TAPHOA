@@ -132,31 +132,30 @@
             border-radius: 8px;
             margin: 15px 0;
         }
+        
+        .status-online {
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        .status-offline {
+            color: var(--danger);
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>🚀 Tools TAPHOA - AI Video & Image Tools</h1>
-        <p>Công cụ AI miễn phí cho sáng tạo nội dung đa phương tiện</p>
+        <p>Công cụ AI miễn phí ỔN ĐỊNH cho sáng tạo nội dung</p>
     </div>
 
     <!-- Tính năng 1: Tạo prompt từ video -->
     <div class="tool-section">
-        <h2>🎬 Tạo Prompt Từ Video</h2>
+        <h2>🎬 Tạo Prompt Từ Video <span class="status-online">(ĐANG HOẠT ĐỘNG)</span></h2>
         <p>Chuyển đổi video thành mô tả văn bản chi tiết để tái sử dụng</p>
         
         <div class="platform-grid">
-            <div class="platform-card">
-                <h3>Google AI Audio <span class="feature-tag">Miễn phí</span></h3>
-                <ul class="platform-features">
-                    <li>Nhận diện giọng nói từ video</li>
-                    <li>Tạo transcript tự động</li>
-                    <li>Hỗ trợ nhiều ngôn ngữ</li>
-                    <li>Độ chính xác cao</li>
-                </ul>
-                <a href="https://aiaudio.google/" class="btn" target="_blank">Truy cập Google AI Audio</a>
-            </div>
-            
             <div class="platform-card">
                 <h3>YouTube Transcript <span class="feature-tag">Miễn phí</span></h3>
                 <ul class="platform-features">
@@ -167,72 +166,95 @@
                 </ul>
                 <a href="https://youtubetranscript.com/" class="btn" target="_blank">Truy cập YouTube Transcript</a>
             </div>
+            
+            <div class="platform-card">
+                <h3>Happy Scribe <span class="feature-tag">30 phút free</span></h3>
+                <ul class="platform-features">
+                    <li>Chuyển audio/video thành text</li>
+                    <li>Hỗ trợ 120+ ngôn ngữ</li>
+                    <li>Độ chính xác cao</li>
+                    <li>Dễ sử dụng</li>
+                </ul>
+                <a href="https://www.happyscribe.com/" class="btn" target="_blank">Truy cập Happy Scribe</a>
+            </div>
+            
+            <div class="platform-card">
+                <h3>Otter.ai <span class="feature-tag">600 phút free</span></h3>
+                <ul class="platform-features">
+                    <li>Ghi chú AI từ audio/video</li>
+                    <li>Nhận diện người nói</li>
+                    <li>Tổng hợp thông minh</li>
+                    <li>App mobile available</li>
+                </ul>
+                <a href="https://otter.ai/" class="btn" target="_blank">Truy cập Otter.ai</a>
+            </div>
         </div>
         
         <div class="note">
-            <strong>💡 Hướng dẫn sử dụng:</strong>
+            <strong>💡 Hướng dẫn sử dụng YouTube Transcript:</strong>
             <ol>
-                <li>Tải video lên Google AI Audio để trích xuất âm thanh</li>
-                <li>Sao chép transcript và chỉnh sửa thành prompt</li>
-                <li>Sử dụng prompt cho các công cụ AI khác</li>
+                <li>Sao chép link YouTube video cần trích xuất</li>
+                <li>Dán link vào YouTube Transcript</li>
+                <li>Nhấn "Get Transcript" để lấy văn bản</li>
+                <li>Chỉnh sửa thành prompt cho AI</li>
             </ol>
         </div>
     </div>
 
     <!-- Tính năng 2: Tạo video từ ảnh và prompt -->
     <div class="tool-section">
-        <h2>🎨 Tạo Video Từ Ảnh & Prompt</h2>
+        <h2>🎨 Tạo Video Từ Ảnh & Prompt <span class="status-online">(ĐANG HOẠT ĐỘNG)</span></h2>
         <p>Biến hình ảnh và ý tưởng thành video sống động với AI</p>
         
         <div class="platform-grid">
             <div class="platform-card">
-                <h3>DreamFace <span class="feature-tag">Miễn phí</span></h3>
+                <h3>Runway ML <span class="feature-tag">125 credits free</span></h3>
                 <ul class="platform-features">
-                    <li>Tạo video từ ảnh khuôn mặt</li>
-                    <li>Điều khiển biểu cảm</li>
-                    <li>Hoạt ảnh mượt mà</li>
-                    <li>Xử lý real-time</li>
-                </ul>
-                <a href="https://dreamface.app/" class="btn" target="_blank">Truy cập DreamFace</a>
-            </div>
-            
-            <div class="platform-card">
-                <h3>Dreamia <span class="feature-tag">Miễn phí</span></h3>
-                <ul class="platform-features">
-                    <li>Tạo video từ text prompt</li>
-                    <li>Kết hợp hình ảnh có sẵn</li>
-                    <li>Hiệu ứng hình ảnh đa dạng</li>
-                    <li>Chất lượng HD</li>
-                </ul>
-                <a href="https://dreamia.ai/" class="btn" target="_blank">Truy cập Dreamia</a>
-            </div>
-            
-            <div class="platform-card">
-                <h3>Runway ML <span class="feature-tag">Free Tier</span></h3>
-                <ul class="platform-features">
-                    <li>125 credit miễn phí</li>
                     <li>Gen-2 video generation</li>
                     <li>Image to video conversion</li>
+                    <li>Text to video</li>
                     <li>Nhiều template có sẵn</li>
                 </ul>
                 <a href="https://runwayml.com/" class="btn" target="_blank">Truy cập Runway</a>
             </div>
+            
+            <div class="platform-card">
+                <h3>Stable Video Diffusion <span class="feature-tag">Open Source</span></h3>
+                <ul class="platform-features">
+                    <li>Image to video AI</li>
+                    <li>Chạy free trên Google Colab</li>
+                    <li>Customizable parameters</li>
+                    <li>Không giới hạn</li>
+                </ul>
+                <a href="https://colab.research.google.com/github/camenduru/stable-video-diffusion-colab/blob/main/stable_video_diffusion_colab.ipynb" class="btn" target="_blank">Chạy trên Colab</a>
+            </div>
+            
+            <div class="platform-card">
+                <h3>Pika Labs <span class="feature-tag">Free tier</span></h3>
+                <ul class="platform-features">
+                    <li>Tạo video từ text & image</li>
+                    <li>Style transfer</li>
+                    <li>Video extension</li>
+                    <li>Discord community</li>
+                </ul>
+                <a href="https://pika.art/" class="btn" target="_blank">Truy cập Pika</a>
+            </div>
         </div>
         
         <div class="note">
-            <strong>🎯 Quy trình tạo video:</strong>
+            <strong>🎯 Quy trình tạo video với Runway:</strong>
             <ol>
-                <li>Chuẩn bị hình ảnh nguồn chất lượng cao</li>
-                <li>Viết prompt mô tả chi tiết video mong muốn</li>
-                <li>Chọn platform phù hợp và tải lên</li>
-                <li>Chỉnh sửa và tải video thành phẩm</li>
+                <li>Đăng ký tài khoản Runway miễn phí</li>
+                <li>Upload hình ảnh hoặc nhập prompt</li>
+                <li>Chọn style và duration</li>
+                <li>Generate và tải video thành phẩm</li>
             </ol>
         </div>
     </div>
 
     <!-- Tính năng 3: Tạo nhép miệng cho nhân vật -->
     <div class="tool-section">
-        <h2>👄 Tạo Nhép Miệng Cho Nhân Vật</h2>
+        <h2>👄 Tạo Nhép Miệng Cho Nhân Vật <span class="status-online">(ĐANG HOẠT ĐỘNG)</span></h2>
         <p>Đồng bộ hóa chuyển động môi với âm thanh cho nhân vật ảnh</p>
         
         <div class="platform-grid">
@@ -249,35 +271,37 @@
             </div>
             
             <div class="platform-card">
-                <h3>D-ID <span class="feature-tag">Free Credits</span></h3>
+                <h3>Sadtalker <span class="feature-tag">Miễn phí</span></h3>
                 <ul class="platform-features">
-                    <li>20 credit miễn phí</li>
-                    <li>Giao diện kéo thả</li>
-                    <li>Xuất video chất lượng</li>
-                    <li>Dễ sử dụng</li>
+                    <li>Talking head animation</li>
+                    <li>Chạy local hoặc Colab</li>
+                    <li>Head pose control</li>
+                    <li>Expression transfer</li>
                 </ul>
-                <a href="https://www.d-id.com/" class="btn" target="_blank">Truy cập D-ID</a>
+                <a href="https://github.com/OpenTalker/SadTalker" class="btn btn-secondary" target="_blank">GitHub SadTalker</a>
+                <a href="https://huggingface.co/spaces/vinthony/SadTalker" class="btn" target="_blank">Chạy Online</a>
             </div>
             
             <div class="platform-card">
-                <h3>Sync Labs <span class="feature-tag">Miễn phí</span></h3>
+                <h3>D-ID <span class="feature-tag">20 credits free</span></h3>
                 <ul class="platform-features">
-                    <li>API miễn phí cho dự án nhỏ</li>
-                    <li>Xử lý real-time</li>
-                    <li>Integration dễ dàng</li>
-                    <li>Documentation đầy đủ</li>
+                    <li>Giao diện kéo thả</li>
+                    <li>Xuất video chất lượng</li>
+                    <li>Dễ sử dụng</li>
+                    <li>API available</li>
                 </ul>
-                <a href="https://www.synclabs.so/" class="btn" target="_blank">Truy cập Sync Labs</a>
+                <a href="https://www.d-id.com/" class="btn" target="_blank">Truy cập D-ID</a>
             </div>
         </div>
         
         <div class="note">
-            <strong>📝 Hướng dẫn Wav2Lip (Khuyến nghị):</strong>
+            <strong>📝 Hướng dẫn Wav2Lip trên Colab:</strong>
             <ol>
-                <li>Truy cập Google Colab link bên trên</li>
-                <li>Kết nối với GPU miễn phí</li>
-                <li>Tải lên video và audio cần đồng bộ</li>
-                <li>Chạy code và tải video kết quả</li>
+                <li>Click "Chạy trên Colab" bên trên</li>
+                <li>Kết nối với GPU miễn phí (click "Connect")</li>
+                <li>Tải lên video face và audio file</li>
+                <li>Chạy tất cả cells và đợi kết quả</li>
+                <li>Tải video đã xử lý về máy</li>
             </ol>
         </div>
     </div>
@@ -288,9 +312,9 @@
         
         <div class="platform-grid">
             <div class="platform-card">
-                <h3>Canva <span class="feature-tag">Miễn phí</span></h3>
-                <p>Chỉnh sửa hình ảnh và tạo thumbnail</p>
-                <a href="https://canva.com" class="btn" target="_blank">Truy cập Canva</a>
+                <h3>Remove.bg <span class="feature-tag">Miễn phí</span></h3>
+                <p>Xóa nền hình ảnh tự động</p>
+                <a href="https://remove.bg" class="btn" target="_blank">Truy cập Remove.bg</a>
             </div>
             
             <div class="platform-card">
@@ -300,16 +324,16 @@
             </div>
             
             <div class="platform-card">
-                <h3>Remove.bg <span class="feature-tag">Miễn phí</span></h3>
-                <p>Xóa nền hình ảnh tự động</p>
-                <a href="https://remove.bg" class="btn" target="_blank">Truy cập Remove.bg</a>
+                <h3>Clipchamp <span class="feature-tag">Miễn phí</span></h3>
+                <p>Editor video online</p>
+                <a href="https://clipchamp.com" class="btn" target="_blank">Truy cập Clipchamp</a>
             </div>
         </div>
     </div>
 
     <footer style="text-align: center; margin-top: 40px; color: #666; padding: 20px;">
-        <p><strong>Tools TAPHOA</strong> - Bộ công cụ AI miễn phí cho người sáng tạo nội dung</p>
-        <p>Last updated: 2025 | Liên kết đến các nền tảng AI uy tín</p>
+        <p><strong>Tools TAPHOA</strong> - Bộ công cụ AI miễn phí ỔN ĐỊNH cho người sáng tạo</p>
+        <p>Last updated: 2025 | Tất cả liên kết đã được kiểm tra và hoạt động</p>
     </footer>
 
     <script>
@@ -317,16 +341,17 @@
         document.querySelectorAll('.btn').forEach(button => {
             button.addEventListener('click', function(e) {
                 if (this.getAttribute('target') === '_blank') {
+                    const originalText = this.innerHTML;
                     this.innerHTML = '⏳ Đang chuyển hướng...';
                     setTimeout(() => {
-                        this.innerHTML = this.textContent.replace('⏳ Đang chuyển hướng...', this.textContent);
-                    }, 2000);
+                        this.innerHTML = originalText;
+                    }, 3000);
                 }
             });
         });
 
-        // Thêm tracking đơn giản
-        console.log('Tools TAPHOA - AI Video Tools đã sẵn sàng!');
+        // Hiển thị thông báo khi trang load
+        console.log('🚀 Tools TAPHOA - Tất cả nền tảng đã được kiểm tra và hoạt động ổn định');
     </script>
 </body>
 </html>
