@@ -340,6 +340,20 @@
             width: 20px;
             text-align: center;
         }
+        
+        /* Token Auto-check */
+        .token-auto-check {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .token-auto-check input {
+            width: 16px;
+            height: 16px;
+        }
     </style>
 </head>
 <body>
@@ -384,6 +398,11 @@
                             Đóng
                         </button>
                     </div>
+                </div>
+                
+                <div class="token-auto-check">
+                    <input type="checkbox" id="autoCheckToken" checked>
+                    <label for="autoCheckToken">Tự động kiểm tra token trước khi phân tích</label>
                 </div>
                 
                 <div class="token-info">
@@ -524,8 +543,30 @@
             updateTokenStatus();
         }
 
+        // Kiểm tra token có hợp lệ không
+        async function validateToken(token) {
+            if (!token) return false;
+            
+            try {
+                const response = await fetch(
+                    'https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large',
+                    {
+                        headers: { Authorization: `Bearer ${token}` },
+                        method: 'POST',
+                        body: JSON.stringify({inputs: "test"}),
+                    }
+                );
+                
+                // Nếu token hợp lệ, API sẽ trả về lỗi 400 (Bad Request) thay vì 401 (Unauthorized)
+                return response.status !== 401;
+            } catch (error) {
+                console.error('Token validation error:', error);
+                return false;
+            }
+        }
+
         // Load token status khi trang được tải
-        window.addEventListener('load', function() {
+        window.addEventListener('load', async function() {
             const savedToken = localStorage.getItem('hfToken');
             const tokenInput = document.getElementById('hfToken');
             
@@ -534,6 +575,18 @@
             }
             
             updateTokenStatus();
+            
+            // Kiểm tra token khi trang tải nếu có token đã lưu
+            if (savedToken) {
+                const isValid = await validateToken(savedToken);
+                if (!isValid) {
+                    alert('⚠️ Token đã lưu không còn hợp lệ. Vui lòng nhập token mới.');
+                    localStorage.removeItem('hfToken');
+                    updateTokenStatus();
+                    document.getElementById('hfToken').value = '';
+                    toggleTokenSection();
+                }
+            }
         });
 
         // Elements
@@ -609,9 +662,22 @@
             }
 
             const hfToken = localStorage.getItem('hfToken');
+            const autoCheck = document.getElementById('autoCheckToken').checked;
+            
             if (!hfToken) {
                 alert('❌ Vui lòng nhập Hugging Face Token trước khi phân tích!');
+                toggleTokenSection();
                 return;
+            }
+            
+            // Kiểm tra token nếu được chọn
+            if (autoCheck) {
+                const isValid = await validateToken(hfToken);
+                if (!isValid) {
+                    alert('❌ Token không hợp lệ hoặc đã hết hạn. Vui lòng kiểm tra lại token của bạn.');
+                    toggleTokenSection();
+                    return;
+                }
             }
 
             videoPreview.style.display = 'none';
