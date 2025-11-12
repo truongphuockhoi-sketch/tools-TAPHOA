@@ -28,12 +28,52 @@
         .subtitle {
             font-size: 1.2rem;
             opacity: 0.9;
+            margin-bottom: 30px;
         }
+        
+        /* Main Feature - Video to Prompt nổi bật */
+        .main-feature {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        .feature-title {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+        .feature-desc {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+        .cta-button {
+            background: #ff6b6b;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .cta-button:hover {
+            background: #ff5252;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Tools Grid */
         .tools-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
-            margin-top: 40px;
         }
         .tool-card {
             background: rgba(255, 255, 255, 0.1);
@@ -56,9 +96,6 @@
         .tool-card h3 {
             margin-bottom: 10px;
             font-size: 1.3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         .tool-card p {
             margin-bottom: 15px;
@@ -92,14 +129,6 @@
             margin-bottom: 15px;
             font-size: 1rem;
         }
-        .newtab-indicator {
-            background: #4ecdc4;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 10px;
-            font-size: 0.8rem;
-            margin-left: 8px;
-        }
     </style>
 </head>
 <body>
@@ -108,6 +137,14 @@
             <h1>🛠️ AI Tools Hub</h1>
             <p class="subtitle">Tổng hợp công cụ AI hữu ích - Hoàn toàn miễn phí</p>
         </header>
+
+        <!-- Main Feature - Video to Prompt -->
+        <div class="main-feature">
+            <div class="feature-icon">🎬</div>
+            <h2 class="feature-title">Video to Prompt</h2>
+            <p class="feature-desc">Phân tích video và tạo prompt AI chất lượng cao từ nội dung</p>
+            <button class="cta-button" onclick="openTool('video-prompt')">Dùng thử ngay</button>
+        </div>
 
         <!-- Tools Grid -->
         <div class="tools-grid" id="toolsGrid">
@@ -137,41 +174,17 @@
                 <p>Merge, split, nén file PDF dễ dàng</p>
             </div>
 
-            <div class="tool-card" data-tool="grammarly">
-                <div class="tool-icon">✍️</div>
-                <h3>Kiểm tra ngữ pháp</h3>
-                <p>Check grammar và cải thiện văn bản</p>
-            </div>
-
-            <!-- Công cụ AI mới THAY THẾ -->
+            <!-- Công cụ AI khác -->
             <div class="tool-card" data-tool="huggingface">
                 <div class="tool-icon">🤗</div>
-                <h3>Hugging Face <span class="newtab-indicator">Tab mới</span></h3>
+                <h3>Hugging Face</h3>
                 <p>Hàng ngàn model AI mã nguồn mở</p>
             </div>
 
             <div class="tool-card" data-tool="leonardo">
                 <div class="tool-icon">🎨</div>
-                <h3>Leonardo AI <span class="newtab-indicator">Tab mới</span></h3>
-                <p>Tạo hình ảnh AI chất lượng cao miễn phí</p>
-            </div>
-
-            <div class="tool-card" data-tool="clipdrop">
-                <div class="tool-icon">🖼️</div>
-                <h3>ClipDrop</h3>
-                <p>Công cụ AI xử lý ảnh từ Stability AI</p>
-            </div>
-
-            <div class="tool-card" data-tool="notionai">
-                <div class="tool-icon">📝</div>
-                <h3>Notion AI <span class="newtab-indicator">Tab mới</span></h3>
-                <p>Viết content, tóm tắt văn bản thông minh</p>
-            </div>
-
-            <div class="tool-card" data-tool="canvaai">
-                <div class="tool-icon">🎨</div>
-                <h3>Canva AI <span class="newtab-indicator">Tab mới</span></h3>
-                <p>Thiết kế đồ họa với AI Magic</p>
+                <h3>Leonardo AI</h3>
+                <p>Tạo hình ảnh AI chất lượng cao</p>
             </div>
         </div>
 
@@ -183,7 +196,7 @@
     </div>
 
     <script>
-        // Danh sách các công cụ với URL và loại mở - ĐÃ TEST HOẠT ĐỘNG
+        // Danh sách các công cụ với URL
         const tools = {
             // Công cụ xử lý ảnh
             'upscale': { url: 'https://bgrem.ai/upscale', type: 'iframe' },
@@ -192,14 +205,13 @@
             
             // Công cụ văn bản & PDF
             'pdf': { url: 'https://ilovepdf.com/', type: 'iframe' },
-            'grammarly': { url: 'https://www.grammarly.com/', type: 'iframe' },
             
-            // Công cụ AI mới THAY THẾ - HOẠT ĐỘNG 100%
+            // Công cụ AI khác
             'huggingface': { url: 'https://huggingface.co/', type: 'newtab' },
             'leonardo': { url: 'https://leonardo.ai/', type: 'newtab' },
-            'clipdrop': { url: 'https://clipdrop.co/', type: 'iframe' },
-            'notionai': { url: 'https://www.notion.so/product/ai', type: 'newtab' },
-            'canvaai': { url: 'https://www.canva.com/ai-tools/', type: 'newtab' }
+
+            // Công cụ Video to Prompt
+            'video-prompt': { url: 'video-prompt.html', type: 'iframe' }
         };
 
         // Thêm sự kiện click cho các thẻ công cụ
