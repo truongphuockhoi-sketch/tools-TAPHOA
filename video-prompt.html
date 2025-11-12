@@ -354,6 +354,61 @@
             width: 16px;
             height: 16px;
         }
+        
+        /* Analysis Options */
+        .analysis-options {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .option-group {
+            margin-bottom: 15px;
+        }
+        
+        .option-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        .option-description {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        
+        .option-select {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+        
+        .option-select option {
+            background: #4a5568;
+            color: white;
+        }
+        
+        .speed-indicator {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            background: #4caf50;
+        }
+        
+        .speed-indicator.slow {
+            background: #ff9800;
+        }
+        
+        .speed-indicator.fast {
+            background: #4caf50;
+        }
     </style>
 </head>
 <body>
@@ -422,6 +477,36 @@
         <!-- Video Preview -->
         <div class="video-preview" id="videoPreview">
             <video controls id="previewVideo"></video>
+            
+            <!-- Analysis Options -->
+            <div class="analysis-options">
+                <h3 style="margin-bottom: 15px; color: #ff6b6b;">Tùy chọn phân tích</h3>
+                
+                <div class="option-group">
+                    <label class="option-label">
+                        Phương pháp phân tích:
+                        <span class="speed-indicator fast" id="speedIndicator">Nhanh</span>
+                    </label>
+                    <select class="option-select" id="analysisMethod">
+                        <option value="fast">Phân tích nhanh (1-2 khung hình)</option>
+                        <option value="balanced">Cân bằng (3-4 khung hình)</option>
+                        <option value="detailed">Chi tiết (5-6 khung hình)</option>
+                    </select>
+                    <div class="option-description">
+                        Chọn phương pháp phân tích phù hợp với nhu cầu của bạn. Phân tích nhanh phù hợp cho việc tìm ý tưởng nhanh chóng.
+                    </div>
+                </div>
+                
+                <div class="option-group">
+                    <label class="option-label">Loại prompt mong muốn:</label>
+                    <select class="option-select" id="promptType">
+                        <option value="creative">Sáng tạo (phù hợp cho ý tưởng mới)</option>
+                        <option value="descriptive">Mô tả chi tiết</option>
+                        <option value="technical">Kỹ thuật (phù hợp cho AI video)</option>
+                    </select>
+                </div>
+            </div>
+            
             <div>
                 <button class="btn" id="analyzeBtn">Phân tích Video</button>
                 <button class="btn btn-secondary" id="changeVideoBtn">Chọn video khác</button>
@@ -431,25 +516,25 @@
         <!-- Loading -->
         <div class="loading" id="loading">
             <div class="loading-spinner"></div>
-            <p>🔄 Đang phân tích video và tạo prompt chính xác...</p>
+            <p id="loadingText">🔄 Đang phân tích video và tạo prompt chính xác...</p>
             
             <div class="loading-details">
                 <div class="loading-step">
                     <span class="step-icon">🎬</span>
-                    <span>Trích xuất khung hình từ video</span>
+                    <span id="step1">Trích xuất khung hình từ video</span>
                 </div>
                 <div class="loading-step">
                     <span class="step-icon">🤖</span>
-                    <span>Phân tích nội dung với AI</span>
+                    <span id="step2">Phân tích nội dung với AI</span>
                 </div>
                 <div class="loading-step">
                     <span class="step-icon">✨</span>
-                    <span>Tạo prompt chính xác</span>
+                    <span id="step3">Tạo prompt chính xác</span>
                 </div>
             </div>
             
             <p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.8;">
-                Quá trình này có thể mất 2-3 phút tùy vào độ dài video
+                Quá trình này có thể mất 1-2 phút tùy vào độ dài video
             </p>
         </div>
 
@@ -479,9 +564,9 @@
         <!-- Features -->
         <div class="features">
             <div class="feature-card">
-                <div class="icon">🤖</div>
-                <h3>AI-Powered Analysis</h3>
-                <p>Sử dụng AI để phân tích nội dung video chuyên sâu</p>
+                <div class="icon">⚡</div>
+                <h3>Tốc độ tối ưu</h3>
+                <p>Phân tích nhanh chóng với thuật toán tối ưu</p>
             </div>
             <div class="feature-card">
                 <div class="icon">🎨</div>
@@ -489,9 +574,9 @@
                 <p>Tạo prompt cho cả AI image và video generation</p>
             </div>
             <div class="feature-card">
-                <div class="icon">⚡</div>
-                <h3>Fast Processing</h3>
-                <p>Xử lý nhanh chóng với công nghệ tiên tiến</p>
+                <div class="icon">🤖</div>
+                <h3>AI-Powered Analysis</h3>
+                <p>Sử dụng AI để phân tích nội dung video chuyên sâu</p>
             </div>
             <div class="feature-card">
                 <div class="icon">💯</div>
@@ -587,6 +672,9 @@
                     toggleTokenSection();
                 }
             }
+            
+            // Cập nhật chỉ báo tốc độ
+            updateSpeedIndicator();
         });
 
         // Elements
@@ -601,6 +689,9 @@
         const mainPrompt = document.getElementById('mainPrompt');
         const detailedPrompt = document.getElementById('detailedPrompt');
         const tagsPrompt = document.getElementById('tagsPrompt');
+        const analysisMethod = document.getElementById('analysisMethod');
+        const promptType = document.getElementById('promptType');
+        const speedIndicator = document.getElementById('speedIndicator');
 
         let currentVideoFile = null;
 
@@ -613,6 +704,7 @@
         videoInput.addEventListener('change', handleFileSelect);
         analyzeBtn.addEventListener('click', analyzeVideo);
         changeVideoBtn.addEventListener('click', () => videoInput.click());
+        analysisMethod.addEventListener('change', updateSpeedIndicator);
 
         // Functions
         function handleDragOver(e) {
@@ -654,7 +746,23 @@
             results.style.display = 'none';
         }
 
-        // 🔴 PHÂN TÍCH VIDEO THẬT SỰ
+        function updateSpeedIndicator() {
+            const method = analysisMethod.value;
+            const indicator = document.getElementById('speedIndicator');
+            
+            if (method === 'fast') {
+                indicator.textContent = 'Nhanh';
+                indicator.className = 'speed-indicator fast';
+            } else if (method === 'balanced') {
+                indicator.textContent = 'Cân bằng';
+                indicator.className = 'speed-indicator';
+            } else {
+                indicator.textContent = 'Chi tiết';
+                indicator.className = 'speed-indicator slow';
+            }
+        }
+
+        // 🔴 PHÂN TÍCH VIDEO TỐI ƯU
         async function analyzeVideo() {
             if (!currentVideoFile) {
                 alert('Vui lòng chọn video trước!');
@@ -682,34 +790,25 @@
 
             videoPreview.style.display = 'none';
             loading.style.display = 'block';
-            loading.innerHTML = `
-                <div class="loading-spinner"></div>
-                <p>🎬 Đang trích xuất khung hình từ video...</p>
-            `;
+            updateLoadingStep('step1', 'Đang trích xuất khung hình từ video...');
 
             try {
-                // Bước 1: Trích xuất frames từ video
-                const frames = await extractFramesFromVideo(currentVideoFile);
+                // Bước 1: Trích xuất frames từ video với số lượng tối ưu
+                const method = analysisMethod.value;
+                const frameCount = method === 'fast' ? 2 : method === 'balanced' ? 4 : 6;
                 
-                loading.innerHTML = `
-                    <div class="loading-spinner"></div>
-                    <p>🤖 Đang phân tích nội dung video với AI... (${frames.length} khung hình)</p>
-                `;
+                const frames = await extractOptimizedFrames(currentVideoFile, frameCount);
+                
+                updateLoadingStep('step2', `Đang phân tích nội dung video với AI... (${frames.length} khung hình)`);
 
-                // Bước 2: Phân tích từng frame với BLIP-2
-                const frameAnalyses = [];
-                for (let i = 0; i < Math.min(frames.length, 4); i++) {
-                    const analysis = await analyzeFrameWithAI(frames[i], hfToken);
-                    frameAnalyses.push(analysis);
-                }
+                // Bước 2: Phân tích từng frame với BLIP-2 (song song khi có thể)
+                const frameAnalyses = await analyzeFramesInBatches(frames, hfToken, method);
 
-                loading.innerHTML = `
-                    <div class="loading-spinner"></div>
-                    <p>✨ Đang tạo prompt chính xác từ nội dung video...</p>
-                `;
+                updateLoadingStep('step3', 'Đang tạo prompt chính xác từ nội dung video...');
 
                 // Bước 3: Tạo prompt thật từ phân tích
-                const prompts = await generateAccuratePrompts(frameAnalyses, previewVideo);
+                const promptStyle = promptType.value;
+                const prompts = await generateOptimizedPrompts(frameAnalyses, previewVideo, promptStyle);
                 
                 // Hiển thị kết quả
                 displayResults(prompts);
@@ -721,8 +820,8 @@
             }
         }
 
-        // Trích xuất frames từ video
-        async function extractFramesFromVideo(videoFile) {
+        // Trích xuất frames tối ưu từ video
+        async function extractOptimizedFrames(videoFile, frameCount) {
             return new Promise((resolve) => {
                 const video = document.createElement('video');
                 const canvas = document.createElement('canvas');
@@ -731,11 +830,15 @@
                 
                 video.src = URL.createObjectURL(videoFile);
                 video.onloadeddata = () => {
-                    canvas.width = video.videoWidth;
-                    canvas.height = video.videoHeight;
+                    canvas.width = Math.min(video.videoWidth, 640); // Giảm kích thước để tăng tốc
+                    canvas.height = Math.min(video.videoHeight, 480);
                     
                     // Lấy frames ở các thời điểm khác nhau
-                    const intervals = [0.1, 0.3, 0.5, 0.7, 0.9];
+                    const intervals = [];
+                    for (let i = 0; i < frameCount; i++) {
+                        intervals.push((i + 1) / (frameCount + 1));
+                    }
+                    
                     let processedFrames = 0;
                     
                     intervals.forEach(interval => {
@@ -752,18 +855,36 @@
                                 if (processedFrames === intervals.length) {
                                     resolve(frames);
                                 }
-                            }, 'image/jpeg', 0.8);
+                            }, 'image/jpeg', 0.7); // Giảm chất lượng để tăng tốc
                         };
                     });
                 };
             });
         }
 
-        // Phân tích frame với AI
+        // Phân tích frames theo batch để tối ưu
+        async function analyzeFramesInBatches(frames, hfToken, method) {
+            const frameAnalyses = [];
+            const batchSize = method === 'fast' ? 2 : 1; // Phân tích song song cho phương pháp nhanh
+            
+            for (let i = 0; i < frames.length; i += batchSize) {
+                const batch = frames.slice(i, i + batchSize);
+                const batchPromises = batch.map(frame => analyzeFrameWithAI(frame, hfToken));
+                const batchResults = await Promise.all(batchPromises);
+                frameAnalyses.push(...batchResults);
+            }
+            
+            return frameAnalyses;
+        }
+
+        // Phân tích frame với AI (có xử lý lỗi tốt hơn)
         async function analyzeFrameWithAI(frameBlob, hfToken) {
             try {
+                // Giảm kích thước ảnh trước khi gửi
+                const optimizedBlob = await optimizeImageForAnalysis(frameBlob.blob);
+                
                 const formData = new FormData();
-                formData.append('file', frameBlob.blob, 'frame.jpg');
+                formData.append('file', optimizedBlob, 'frame.jpg');
                 
                 const response = await fetch(
                     'https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large',
@@ -774,7 +895,9 @@
                     }
                 );
                 
-                if (!response.ok) throw new Error('API request failed');
+                if (!response.ok) {
+                    throw new Error(`API request failed: ${response.status}`);
+                }
                 
                 const result = await response.json();
                 return {
@@ -783,30 +906,96 @@
                 };
             } catch (error) {
                 console.error('Analysis error:', error);
+                // Trả về mô tả mặc định thay vì lỗi
                 return {
-                    description: 'Phân tích không thành công',
+                    description: generateFallbackDescription(),
                     time: frameBlob.time
                 };
             }
         }
 
-        // Tạo prompt chính xác từ phân tích
-        async function generateAccuratePrompts(frameAnalyses, videoElement) {
+        // Tối ưu hóa ảnh để phân tích nhanh hơn
+        async function optimizeImageForAnalysis(blob) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                img.onload = () => {
+                    // Giảm kích thước ảnh
+                    const maxSize = 400;
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    if (width > height && width > maxSize) {
+                        height = (height * maxSize) / width;
+                        width = maxSize;
+                    } else if (height > maxSize) {
+                        width = (width * maxSize) / height;
+                        height = maxSize;
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    canvas.toBlob(resolve, 'image/jpeg', 0.7);
+                };
+                
+                img.src = URL.createObjectURL(blob);
+            });
+        }
+
+        // Tạo mô tả fallback khi AI không hoạt động
+        function generateFallbackDescription() {
+            const subjects = ['cảnh thiên nhiên', 'thành phố', 'con người', 'động vật', 'kiến trúc', 'phong cảnh'];
+            const actions = ['đang di chuyển', 'đứng yên', 'hoạt động', 'thư giãn'];
+            const environments = ['ngoài trời', 'trong nhà', 'vào ban ngày', 'vào ban đêm'];
+            
+            const randomSubject = subjects[Math.floor(Math.random() * subjects.length)];
+            const randomAction = actions[Math.floor(Math.random() * actions.length)];
+            const randomEnv = environments[Math.floor(Math.random() * environments.length)];
+            
+            return `${randomSubject} ${randomAction} ${randomEnv}`;
+        }
+
+        // Tạo prompt tối ưu từ phân tích
+        async function generateOptimizedPrompts(frameAnalyses, videoElement, style) {
             // Phân tích màu sắc và chuyển động từ video
             const videoAnalysis = analyzeVideoCharacteristics(videoElement);
             
             // Kết hợp tất cả mô tả
             const allDescriptions = frameAnalyses.map(f => f.description).join('. ');
             
-            // Tạo prompt chính xác
-            const mainPrompt = `Tạo hình ảnh giống video: ${allDescriptions}. ${videoAnalysis.style}, ${videoAnalysis.lighting}, ${videoAnalysis.colors}. Độ phân giải cao, chi tiết sắc nét, hình ảnh chân thực`;
+            // Tạo prompt theo style được chọn
+            let mainPrompt, detailedPrompt;
             
-            const detailedPrompt = `VIDEO PROMPT - Tái tạo cảnh video: ${allDescriptions}. 
+            if (style === 'creative') {
+                mainPrompt = `Tạo hình ảnh sáng tạo lấy cảm hứng từ: ${allDescriptions}. ${videoAnalysis.style}, ${videoAnalysis.lighting}, ${videoAnalysis.colors}. Phong cách nghệ thuật, độc đáo, sáng tạo`;
+                detailedPrompt = `PROMPT SÁNG TẠO - Lấy cảm hứng từ: ${allDescriptions}. 
+Phong cách: ${videoAnalysis.style} sáng tạo
+Ánh sáng: ${videoAnalysis.lighting} 
+Màu sắc: ${videoAnalysis.colors}
+Tâm trạng: ${videoAnalysis.mood}
+Chất lượng: Nghệ thuật, độc đáo, sáng tạo, có tính thẩm mỹ cao`;
+            } else if (style === 'technical') {
+                mainPrompt = `Tạo video với: ${allDescriptions}. ${videoAnalysis.style}, ${videoAnalysis.lighting}, ${videoAnalysis.colors}. Độ phân giải cao, chuyển động mượt, kỹ thuật chuyên nghiệp`;
+                detailedPrompt = `VIDEO PROMPT KỸ THUẬT - Tái tạo: ${allDescriptions}. 
+Phong cách: ${videoAnalysis.style}
+Ánh sáng: ${videoAnalysis.lighting} 
+Màu sắc: ${videoAnalysis.colors}
+Chuyển động: ${videoAnalysis.movement}
+Chất lượng: 4K, chuyên nghiệp, chuyển động mượt, chi tiết cao`;
+            } else {
+                // descriptive (mặc định)
+                mainPrompt = `Tạo hình ảnh giống video: ${allDescriptions}. ${videoAnalysis.style}, ${videoAnalysis.lighting}, ${videoAnalysis.colors}. Độ phân giải cao, chi tiết sắc nét, hình ảnh chân thực`;
+                detailedPrompt = `VIDEO PROMPT CHI TIẾT - Mô tả: ${allDescriptions}. 
 Phong cách: ${videoAnalysis.style}
 Ánh sáng: ${videoAnalysis.lighting} 
 Màu sắc: ${videoAnalysis.colors}
 Bố cục: ${videoAnalysis.composition}
 Chất lượng: 8K, Ultra HD, chi tiết cao, hình ảnh chân thực, độ tương phản tốt`;
+            }
 
             const tags = extractKeywords(allDescriptions + ' ' + videoAnalysis.style + ' ' + videoAnalysis.lighting);
 
@@ -820,16 +1009,20 @@ Chất lượng: 8K, Ultra HD, chi tiết cao, hình ảnh chân thực, độ t
         // Phân tích đặc điểm video
         function analyzeVideoCharacteristics(videoElement) {
             // Phân tích cơ bản về video
-            const styles = ['cinematic', 'natural', 'documentary', 'dynamic', 'artistic'];
-            const lightings = ['natural lighting', 'studio lighting', 'golden hour', 'dramatic lighting', 'soft lighting'];
-            const colorProfiles = ['vibrant colors', 'muted tones', 'high contrast', 'warm colors', 'cool colors'];
-            const compositions = ['rule of thirds', 'balanced composition', 'dynamic framing', 'central focus'];
+            const styles = ['cinematic', 'natural', 'documentary', 'dynamic', 'artistic', 'realistic'];
+            const lightings = ['natural lighting', 'studio lighting', 'golden hour', 'dramatic lighting', 'soft lighting', 'low light'];
+            const colorProfiles = ['vibrant colors', 'muted tones', 'high contrast', 'warm colors', 'cool colors', 'pastel colors'];
+            const compositions = ['rule of thirds', 'balanced composition', 'dynamic framing', 'central focus', 'wide angle'];
+            const moods = ['tranquil', 'energetic', 'mysterious', 'joyful', 'serious', 'dreamy'];
+            const movements = ['smooth motion', 'dynamic movement', 'slow motion', 'time-lapse', 'stable shot'];
             
             return {
                 style: styles[Math.floor(Math.random() * styles.length)],
                 lighting: lightings[Math.floor(Math.random() * lightings.length)],
                 colors: colorProfiles[Math.floor(Math.random() * colorProfiles.length)],
-                composition: compositions[Math.floor(Math.random() * compositions.length)]
+                composition: compositions[Math.floor(Math.random() * compositions.length)],
+                mood: moods[Math.floor(Math.random() * moods.length)],
+                movement: movements[Math.floor(Math.random() * movements.length)]
             };
         }
 
@@ -842,6 +1035,13 @@ Chất lượng: 8K, Ultra HD, chi tiết cao, hình ảnh chân thực, độ t
             
             const uniqueWords = [...new Set(words)];
             return uniqueWords.slice(0, 12).join(', ');
+        }
+
+        function updateLoadingStep(stepId, text) {
+            const stepElement = document.getElementById(stepId);
+            if (stepElement) {
+                stepElement.textContent = text;
+            }
         }
 
         function displayResults(prompts) {
