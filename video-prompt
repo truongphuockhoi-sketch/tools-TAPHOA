@@ -202,15 +202,16 @@
 
         <!-- 🔴 VÙNG NHẬP TOKEN -->
         <div class="token-section">
-            <h3 style="color: #ff0000; margin-bottom: 15px;">🔑 NHẬP HUGGING FACE TOKEN</h3>
-            <p style="margin-bottom: 15px;">Để sử dụng tính năng AI thật, vui lòng nhập token của bạn:</p>
-            <!-- Ô NHẬP TOKEN - KHÔNG CÓ TOKEN MẶC ĐỊNH -->
-            <input type="password" id="hfToken" class="token-input" placeholder="Dán token của bạn vào đây (bắt đầu bằng hf_)">
-            <div>
+            <h3 style="color: #ff0000; margin-bottom: 15px; text-align: center; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.3); background: rgba(255,0,0,0.1); padding: 12px; border-radius: 10px; border: 1px solid #ff0000;">
+                ⚠️ 🔑 NHẬP HUGGING FACE TOKEN
+            </h3>
+            <p style="margin-bottom: 15px; text-align: center;">Để sử dụng tính năng AI thật, vui lòng nhập token của bạn:</p>
+            <input type="password" id="hfToken" class="token-input" placeholder="Nhập token của bạn (bắt đầu bằng hf_)">
+            <div style="text-align: center;">
                 <button class="token-btn" onclick="saveToken()">💾 Lưu Token</button>
                 <button class="token-btn" onclick="clearToken()" style="background: #666;">🗑️ Xóa Token</button>
             </div>
-            <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
+            <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8; text-align: center;">
                 Token được lưu cục bộ trên trình duyệt của bạn - an toàn & bảo mật
             </p>
         </div>
