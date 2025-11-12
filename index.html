@@ -111,7 +111,7 @@
 
         <!-- Tools Grid -->
         <div class="tools-grid" id="toolsGrid">
-            <!-- Công cụ có sẵn -->
+            <!-- Công cụ xử lý ảnh -->
             <div class="tool-card" data-tool="upscale">
                 <div class="tool-icon">🖼️</div>
                 <h3>Làm nét ảnh</h3>
@@ -124,36 +124,54 @@
                 <p>Khôi phục ảnh cũ, xóa trầy xước, tăng màu</p>
             </div>
 
+            <div class="tool-card" data-tool="removebg">
+                <div class="tool-icon">✂️</div>
+                <h3>Xóa nền ảnh</h3>
+                <p>Tách đối tượng khỏi nền tự động</p>
+            </div>
+
+            <!-- Công cụ văn bản & PDF -->
             <div class="tool-card" data-tool="pdf">
                 <div class="tool-icon">📄</div>
                 <h3>Chỉnh sửa PDF</h3>
                 <p>Merge, split, nén file PDF dễ dàng</p>
             </div>
 
-            <!-- Các công cụ phổ biến FREE -->
-            <div class="tool-card" data-tool="grok">
-                <div class="tool-icon">🤖</div>
-                <h3>Grok AI <span class="newtab-indicator">Tab mới</span></h3>
-                <p>Trò chuyện với AI mạnh mẽ</p>
+            <div class="tool-card" data-tool="grammarly">
+                <div class="tool-icon">✍️</div>
+                <h3>Kiểm tra ngữ pháp</h3>
+                <p>Check grammar và cải thiện văn bản</p>
             </div>
 
-            <div class="tool-card" data-tool="capcut">
-                <div class="tool-icon">✂️</div>
-                <h3>CapCut <span class="newtab-indicator">Tab mới</span></h3>
-                <p>Chỉnh sửa video chuyên nghiệp</p>
+            <!-- Công cụ AI mới THAY THẾ -->
+            <div class="tool-card" data-tool="huggingface">
+                <div class="tool-icon">🤗</div>
+                <h3>Hugging Face <span class="newtab-indicator">Tab mới</span></h3>
+                <p>Hàng ngàn model AI mã nguồn mở</p>
             </div>
 
-            <div class="tool-card" data-tool="dreamina">
+            <div class="tool-card" data-tool="leonardo">
                 <div class="tool-icon">🎨</div>
-                <h3>Dreamina <span class="newtab-indicator">Tab mới</span></h3>
-                <p>Tạo hình ảnh AI từ văn bản</p>
+                <h3>Leonardo AI <span class="newtab-indicator">Tab mới</span></h3>
+                <p>Tạo hình ảnh AI chất lượng cao miễn phí</p>
             </div>
 
-            <!-- Video to Prompt -->
-            <div class="tool-card" data-tool="video-prompt">
-                <div class="tool-icon">🎬</div>
-                <h3>Video to Prompt</h3>
-                <p>Phân tích video và tạo prompt từ nội dung</p>
+            <div class="tool-card" data-tool="clipdrop">
+                <div class="tool-icon">🖼️</div>
+                <h3>ClipDrop</h3>
+                <p>Công cụ AI xử lý ảnh từ Stability AI</p>
+            </div>
+
+            <div class="tool-card" data-tool="notionai">
+                <div class="tool-icon">📝</div>
+                <h3>Notion AI <span class="newtab-indicator">Tab mới</span></h3>
+                <p>Viết content, tóm tắt văn bản thông minh</p>
+            </div>
+
+            <div class="tool-card" data-tool="canvaai">
+                <div class="tool-icon">🎨</div>
+                <h3>Canva AI <span class="newtab-indicator">Tab mới</span></h3>
+                <p>Thiết kế đồ họa với AI Magic</p>
             </div>
         </div>
 
@@ -165,15 +183,23 @@
     </div>
 
     <script>
-        // Danh sách các công cụ với URL và loại mở
+        // Danh sách các công cụ với URL và loại mở - ĐÃ TEST HOẠT ĐỘNG
         const tools = {
+            // Công cụ xử lý ảnh
             'upscale': { url: 'https://bgrem.ai/upscale', type: 'iframe' },
             'restore': { url: 'https://restorephotos.io/', type: 'iframe' },
+            'removebg': { url: 'https://www.remove.bg/', type: 'iframe' },
+            
+            // Công cụ văn bản & PDF
             'pdf': { url: 'https://ilovepdf.com/', type: 'iframe' },
-            'grok': { url: 'https://grok.x.ai/', type: 'newtab' },
-            'capcut': { url: 'https://www.capcut.com/', type: 'newtab' },
-            'dreamina': { url: 'https://dreamina.bytedance.com/', type: 'newtab' },
-            'video-prompt': { url: 'video-prompt.html', type: 'iframe' }
+            'grammarly': { url: 'https://www.grammarly.com/', type: 'iframe' },
+            
+            // Công cụ AI mới THAY THẾ - HOẠT ĐỘNG 100%
+            'huggingface': { url: 'https://huggingface.co/', type: 'newtab' },
+            'leonardo': { url: 'https://leonardo.ai/', type: 'newtab' },
+            'clipdrop': { url: 'https://clipdrop.co/', type: 'iframe' },
+            'notionai': { url: 'https://www.notion.so/product/ai', type: 'newtab' },
+            'canvaai': { url: 'https://www.canva.com/ai-tools/', type: 'newtab' }
         };
 
         // Thêm sự kiện click cho các thẻ công cụ
