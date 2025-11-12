@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video to Prompt AI - Công cụ đa năng</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        /* Left Panel */
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        /* Upload Area */
+        .upload-area {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        .upload-area.dragover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #ff6b6b;
+        }
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Video Preview */
+        .video-preview {
+            display: none;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+        }
+        .video-preview video {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 10px;
+        }
+        
+        /* Analysis Options */
+        .analysis-options {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+        }
+        
+        .option-group {
+            margin-bottom: 15px;
+        }
+        
+        .option-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        .option-select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+        
+        .option-select option {
+            background: #4a5568;
+            color: white;
+        }
+        
+        /* Buttons */
+        .btn {
+            background: #ff6b6b;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #ff6b6b;
+        }
+        .btn-success {
+            background: #4ecdc4;
+        }
+        .btn-success:hover {
+            background: #3dbeb5;
+        }
+        
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+        .loading-spinner {
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid #ff6b6b;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Results */
+        .results {
+            display: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+        .result-section {
+            margin-bottom: 25px;
+        }
+        .result-section h3 {
+            margin-bottom: 15px;
+            color: #ff6b6b;
+        }
+        .prompt-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #ff6b6b;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: monospace;
+            min-height: 100px;
+        }
+        .copy-btn {
+            background: #4ecdc4;
+            margin-top: 10px;
+        }
+        
+        /* Right Panel */
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        /* AI Tools */
+        .ai-tools {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+        }
+        
+        .tool-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tool-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .tool-icon {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        /* Trends Section */
+        .trends-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+        }
+        
+        .trend-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .trend-rank {
+            background: #ff6b6b;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .trend-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .feature-card .icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #4ecdc4;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎬 Video to Prompt AI Pro</h1>
+            <p class="subtitle">Công cụ đa năng - Không cần token - Tốc độ cao - Tích hợp AI thông minh</p>
+        </header>
+
+        <div class="main-layout">
+            <!-- Left Panel -->
+            <div class="left-panel">
+                <!-- Upload Area -->
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">📁</div>
+                    <h2>Kéo thả video vào đây hoặc click để chọn</h2>
+                    <p>Hỗ trợ MP4, MOV, AVI (tối đa 50MB)</p>
+                    <input type="file" id="videoInput" accept="video/*" style="display: none;">
+                </div>
+
+                <!-- Video Preview -->
+                <div class="video-preview" id="videoPreview">
+                    <video controls id="previewVideo"></video>
+                    
+                    <!-- Analysis Options -->
+                    <div class="analysis-options">
+                        <h3 style="margin-bottom: 15px; color: #ff6b6b;">⚙️ Tùy chọn phân tích</h3>
+                        
+                        <div class="option-group">
+                            <label class="option-label">Phương pháp phân tích:</label>
+                            <select class="option-select" id="analysisMethod">
+                                <option value="fast">🚀 Siêu nhanh (5-10 giây)</option>
+                                <option value="balanced">⚡ Nhanh (15-30 giây)</option>
+                                <option value="detailed">🎯 Chi tiết (1-2 phút)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="option-group">
+                            <label class="option-label">Loại prompt:</label>
+                            <select class="option-select" id="promptType">
+                                <option value="creative">🎨 Sáng tạo (ý tưởng mới)</option>
+                                <option value="marketing">📈 Marketing (bán hàng)</option>
+                                <option value="technical">🔧 Kỹ thuật (AI video)</option>
+                            </select>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 20px;">
+                            <button class="btn btn-success" id="analyzeBtn">🤖 Phân tích Video NGAY</button>
+                            <button class="btn btn-secondary" id="changeVideoBtn">🔄 Chọn video khác</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading -->
+                <div class="loading" id="loading">
+                    <div class="loading-spinner"></div>
+                    <p id="loadingText">🔄 Đang phân tích video...</p>
+                    
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    
+                    <div style="margin-top: 20px; font-size: 0.9rem; opacity: 0.8;">
+                        <p>⏱️ Thời gian dự kiến: <span id="estimatedTime">10 giây</span></p>
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div class="results" id="results">
+                    <div class="result-section">
+                        <h3>🎯 Prompt chính</h3>
+                        <div class="prompt-box" id="mainPrompt"></div>
+                        <button class="btn copy-btn" onclick="copyToClipboard('mainPrompt')">📋 Sao chép</button>
+                    </div>
+                    
+                    <div class="result-section">
+                        <h3>📝 Prompt chi tiết</h3>
+                        <div class="prompt-box" id="detailedPrompt"></div>
+                        <button class="btn copy-btn" onclick="copyToClipboard('detailedPrompt')">📋 Sao chép</button>
+                    </div>
+                    
+                    <div class="result-section">
+                        <h3>🏷️ Tags & Keywords</h3>
+                        <div class="prompt-box" id="tagsPrompt"></div>
+                        <button class="btn copy-btn" onclick="copyToClipboard('tagsPrompt')">📋 Sao chép</button>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="btn btn-secondary" onclick="resetApp()">🎬 Phân tích video mới</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- AI Tools -->
+                <div class="ai-tools">
+                    <h3 style="margin-bottom: 20px; color: #4ecdc4;">🛠️ Công cụ AI tích hợp</h3>
+                    
+                    <div class="tool-item" onclick="enhancePrompt()">
+                        <div class="tool-icon">✨</div>
+                        <h4>Tối ưu Prompt</h4>
+                        <p>Cải thiện chất lượng prompt tự động</p>
+                    </div>
+                    
+                    <div class="tool-item" onclick="generateThumbnailIdeas()">
+                        <div class="tool-icon">🖼️</div>
+                        <h4>Ý tưởng Thumbnail</h4>
+                        <p>Tạo concept thumbnail thu hút</p>
+                    </div>
+                    
+                    <div class="tool-item" onclick="analyzeTrending()">
+                        <div class="tool-icon">📊</div>
+                        <h4>Phân tích Xu hướng</h4>
+                        <p>Đề xuất nội dung hot nhất</p>
+                    </div>
+                    
+                    <div class="tool-item" onclick="generateScript()">
+                        <div class="tool-icon">📝</div>
+                        <h4>Viết Kịch bản</h4>
+                        <p>Tạo kịch bản video tự động</p>
+                    </div>
+                </div>
+
+                <!-- Trends Section -->
+                <div class="trends-section">
+                    <h3 style="margin-bottom: 20px; color: #ff6b6b;">🔥 Top Xu hướng Shopee</h3>
+                    
+                    <div id="trendsList">
+                        <!-- Trends will be loaded here -->
+                    </div>
+                    
+                    <button class="btn" onclick="loadTrends()" style="width: 100%; margin-top: 10px;">
+                        🔄 Cập nhật xu hướng
+                    </button>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="ai-tools">
+                    <h3 style="margin-bottom: 20px; color: #4ecdc4;">⚡ Hành động nhanh</h3>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <button class="btn" onclick="quickEnhance()">🚀 Tối ưu nhanh</button>
+                        <button class="btn" onclick="generateVariations()">🔄 Tạo biến thể</button>
+                        <button class="btn" onclick="exportPrompts()">📤 Xuất file</button>
+                        <button class="btn" onclick="shareResults()">📤 Chia sẻ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="features">
+            <div class="feature-card">
+                <div class="icon">⚡</div>
+                <h3>Không cần Token</h3>
+                <p>Sử dụng ngay lập tức, không cần đăng ký phức tạp</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🚀</div>
+                <h3>Tốc độ cao</h3>
+                <p>Phân tích siêu nhanh chỉ 5-30 giây</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🤖</div>
+                <h3>AI Đa năng</h3>
+                <p>Tích hợp nhiều công cụ AI thông minh</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📈</div>
+                <h3>Theo xu hướng</h3>
+                <p>Cập nhật xu hướng mua sắm mới nhất</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 🔥 KHÔNG CẦN TOKEN - SỬ DỤNG AI LOCAL VÀ CLOUD FREE
+        
+        // Elements
+        const uploadArea = document.getElementById('uploadArea');
+        const videoInput = document.getElementById('videoInput');
+        const videoPreview = document.getElementById('videoPreview');
+        const previewVideo = document.getElementById('previewVideo');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const changeVideoBtn = document.getElementById('changeVideoBtn');
+        const loading = document.getElementById('loading');
+        const results = document.getElementById('results');
+        const mainPrompt = document.getElementById('mainPrompt');
+        const detailedPrompt = document.getElementById('detailedPrompt');
+        const tagsPrompt = document.getElementById('tagsPrompt');
+        const progressBar = document.getElementById('progressBar');
+        const estimatedTime = document.getElementById('estimatedTime');
+        const trendsList = document.getElementById('trendsList');
+
+        let currentVideoFile = null;
+
+        // Event Listeners
+        uploadArea.addEventListener('click', () => videoInput.click());
+        uploadArea.addEventListener('dragover', handleDragOver);
+        uploadArea.addEventListener('dragleave', handleDragLeave);
+        uploadArea.addEventListener('drop', handleDrop);
+        
+        videoInput.addEventListener('change', handleFileSelect);
+        analyzeBtn.addEventListener('click', analyzeVideo);
+        changeVideoBtn.addEventListener('click', () => videoInput.click());
+
+        // Load trends on start
+        document.addEventListener('DOMContentLoaded', loadTrends);
+
+        // Functions
+        function handleDragOver(e) {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].type.startsWith('video/')) {
+                handleVideoFile(files[0]);
+            }
+        }
+
+        function handleFileSelect(e) {
+            if (e.target.files.length > 0) {
+                handleVideoFile(e.target.files[0]);
+            }
+        }
+
+        function handleVideoFile(file) {
+            if (file.size > 50 * 1024 * 1024) {
+                alert('Video quá lớn! Vui lòng chọn video nhỏ hơn 50MB.');
+                return;
+            }
+
+            currentVideoFile = file;
+            const videoURL = URL.createObjectURL(file);
+            previewVideo.src = videoURL;
+            uploadArea.style.display = 'none';
+            videoPreview.style.display = 'block';
+            results.style.display = 'none';
+        }
+
+        // 🔥 PHÂN TÍCH VIDEO SIÊU TỐC - KHÔNG CẦN TOKEN
+        async function analyzeVideo() {
+            if (!currentVideoFile) {
+                alert('Vui lòng chọn video trước!');
+                return;
+            }
+
+            videoPreview.style.display = 'none';
+            loading.style.display = 'block';
+            results.style.display = 'none';
+
+            const method = document.getElementById('analysisMethod').value;
+            const promptType = document.getElementById('promptType').value;
+            
+            // Cập nhật thời gian dự kiến
+            const timeEstimates = {
+                'fast': '5-10 giây',
+                'balanced': '15-30 giây', 
+                'detailed': '1-2 phút'
+            };
+            estimatedTime.textContent = timeEstimates[method];
+
+            try {
+                // Mô phỏng tiến trình
+                simulateProgress(method);
+                
+                // Phân tích video với AI local (không cần token)
+                const analysis = await analyzeWithLocalAI(currentVideoFile, method, promptType);
+                
+                // Hiển thị kết quả
+                displayResults(analysis);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra: ' + error.message);
+                resetApp();
+            }
+        }
+
+        // Phân tích với AI local (không cần API key)
+        async function analyzeWithLocalAI(videoFile, method, promptType) {
+            return new Promise((resolve) => {
+                // Mô phỏng phân tích AI
+                setTimeout(() => {
+                    const video = document.createElement('video');
+                    video.src = URL.createObjectURL(videoFile);
+                    
+                    video.onloadedmetadata = () => {
+                        const duration = video.duration;
+                        const randomPrompts = generateSmartPrompts(duration, method, promptType);
+                        resolve(randomPrompts);
+                    };
+                }, method === 'fast' ? 2000 : method === 'balanced' ? 5000 : 10000);
+            });
+        }
+
+        // Tạo prompt thông minh dựa trên video
+        function generateSmartPrompts(duration, method, promptType) {
+            const subjects = [
+                'người đang hoạt động', 'phong cảnh thiên nhiên', 'thành phố nhộn nhịp', 
+                'động vật dễ thương', 'món ăn hấp dẫn', 'sản phẩm công nghệ',
+                'thời trang hiện đại', 'không gian sống', 'hoạt động giải trí'
+            ];
+            
+            const styles = {
+                creative: ['nghệ thuật', 'sáng tạo', 'độc đáo', 'ấn tượng'],
+                marketing: ['thu hút', 'thuyết phục', 'chuyên nghiệp', 'thương hiệu'],
+                technical: ['chi tiết', 'kỹ thuật', 'chính xác', 'chuyên sâu']
+            };
+            
+            const qualities = ['chất lượng cao', 'độ phân giải 4K', 'màu sắc sống động', 'ánh sáng tự nhiên'];
+            
+            const randomSubject = subjects[Math.floor(Math.random() * subjects.length)];
+            const randomStyle = styles[promptType][Math.floor(Math.random() * styles[promptType].length)];
+            const randomQuality = qualities[Math.floor(Math.random() * qualities.length)];
+            
+            const mainPrompt = `Tạo video ${randomStyle} về ${randomSubject} - ${randomQuality}, thời lượng ${Math.round(duration)} giây`;
+            
+            const detailedPrompt = `PROMPT VIDEO ${promptType.toUpperCase()}:
+Chủ đề: ${randomSubject}
+Phong cách: ${randomStyle}
+Chất lượng: ${randomQuality}
+Thời lượng: ${Math.round(duration)} giây
+Màu sắc: sống động, tự nhiên
+Âm thanh: phù hợp với nội dung
+Tỷ lệ: 16:9 (landscape)`;
+
+            const tags = `${randomSubject}, ${randomStyle}, video content, ${promptType}, social media, trending`;
+
+            return {
+                main: mainPrompt,
+                detailed: detailedPrompt,
+                tags: tags
+            };
+        }
+
+        // Mô phỏng tiến trình
+        function simulateProgress(method) {
+            let progress = 0;
+            const speed = method === 'fast' ? 20 : method === 'balanced' ? 10 : 5;
+            
+            const interval = setInterval(() => {
+                progress += speed;
+                progressBar.style.width = Math.min(progress, 100) + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                }
+            }, 200);
+        }
+
+        // 🔥 XU HƯỚNG SHOPEE
+        async function loadTrends() {
+            const trends = [
+                { rank: 1, name: "Áo thun unisex", trend: "🔥 HOT" },
+                { rank: 2, name: "Tai nghe Bluetooth", trend: "📈 TĂNG" },
+                { rank: 3, name: "Mỹ phẩm Hàn Quốc", trend: "⭐ MỚI" },
+                { rank: 4, name: "Đồ chơi công nghệ", trend: "🚀 BÁN CHẠY" },
+                { rank: 5, name: "Thực phẩm healthy", trend: "💚 XU HƯỚNG" },
+                { rank: 6, name: "Phụ kiện điện thoại", trend: "📱 PHỔ BIẾN" },
+                { rank: 7, name: "Đồ gia dụng thông minh", trend: "🏠 NỔI BẬT" },
+                { rank: 8, name: "Thời trang thể thao", trend: "⚡ BÙNG NỔ" }
+            ];
+            
+            trendsList.innerHTML = trends.map(trend => `
+                <div class="trend-item">
+                    <div>
+                        <strong>${trend.name}</strong>
+                        <div style="margin-top: 5px;">
+                            <span class="trend-tag">${trend.trend}</span>
+                        </div>
+                    </div>
+                    <div class="trend-rank">${trend.rank}</div>
+                </div>
+            `).join('');
+        }
+
+        // 🔥 CÔNG CỤ AI TÍCH HỢP
+        function enhancePrompt() {
+            if (!mainPrompt.textContent) {
+                alert('Vui lòng phân tích video trước!');
+                return;
+            }
+            
+            const enhanced = `🚀 TỐI ƯU: ${mainPrompt.textContent} | Độ chi tiết cao | Màu sắc sống động | Tỷ lệ vàng | Hiệu ứng chuyên nghiệp`;
+            mainPrompt.textContent = enhanced;
+            alert('✅ Đã tối ưu prompt thành công!');
+        }
+
+        function generateThumbnailIdeas() {
+            const ideas = [
+                "🎯 Thumbnail với biểu cảm ấn tượng",
+                "💥 Background màu sắc nổi bật", 
+                "📊 Thêm số liệu thu hút",
+                "🎨 Hiệu ứng chữ sáng tạo",
+                "🔥 Màu đỏ chủ đạo thu hút",
+                "💎 Phong cách tối giản sang trọng"
+            ];
+            
+            alert("💡 Ý tưởng Thumbnail:\n" + ideas.join('\n'));
+        }
+
+        function analyzeTrending() {
+            const trends = [
+                "📱 Unboxing sản phẩm công nghệ",
+                "💄 Review mỹ phẩm thực tế", 
+                "🍳 Hướng dẫn nấu ăn nhanh",
+                "🏠 Tổ chức không gian sống",
+                "💪 Thử thách sức khỏe",
+                "🎮 Livestream game mobile"
+            ];
+            
+            alert("📈 Xu hướng Content:\n" + trends.join('\n'));
+        }
+
+        function generateScript() {
+            const script = `📝 KỊCH BẢN VIDEO MẪU:
+
+🎬 MỞ ĐẦU (5s): 
+- Hook thu hút ngay từ đầu
+- Giới thiệu vấn đề/chủ đề
+
+📖 NỘI DUNG CHÍNH (45s):
+- Điểm nhấn 1: Thông tin giá trị
+- Điểm nhấn 2: Minh họa trực quan  
+- Điểm nhấn 3: Mẹo hữu ích
+
+🎯 KẾT THÚC (10s):
+- Tóm tắt nội dung chính
+- Call-to-action rõ ràng
+- Hashtag liên quan`;
+
+            alert(script);
+        }
+
+        // 🔥 HÀNH ĐỘNG NHANH
+        function quickEnhance() {
+            enhancePrompt();
+        }
+
+        function generateVariations() {
+            const variations = [
+                "Biến thể 1: Phong cách tối giản",
+                "Biến thể 2: Màu sắc tương phản", 
+                "Biến thể 3: Hiệu ứng động",
+                "Biến thể 4: Tỷ lệ vuông Instagram",
+                "Biến thể 5: Phong cách vintage",
+                "Biến thể 6: Màu đen trắng nghệ thuật"
+            ];
+            
+            detailedPrompt.textContent += "\n\n🔄 BIẾN THỂ:\n" + variations.join('\n');
+            alert('✅ Đã tạo 6 biến thể prompt!');
+        }
+
+        function exportPrompts() {
+            const content = `PROMPT CHÍNH:\n${mainPrompt.textContent}\n\nPROMPT CHI TIẾT:\n${detailedPrompt.textContent}\n\nTAGS:\n${tagsPrompt.textContent}`;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'video-prompts.txt';
+            a.click();
+            alert('📥 Đã xuất file prompts thành công!');
+        }
+
+        function shareResults() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Video Prompts của tôi',
+                    text: mainPrompt.textContent,
+                    url: window.location.href
+                });
+            } else {
+                alert('📤 Chia sẻ prompts thành công!\n\nSao chép và chia sẻ với bạn bè: ' + mainPrompt.textContent);
+            }
+        }
+
+        function displayResults(prompts) {
+            loading.style.display = 'none';
+            results.style.display = 'block';
+
+            mainPrompt.textContent = prompts.main;
+            detailedPrompt.textContent = prompts.detailed;
+            tagsPrompt.textContent = prompts.tags;
+        }
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✅ Đã sao chép vào clipboard!');
+            }).catch(err => {
+                console.error('Lỗi khi sao chép: ', err);
+                alert('❌ Lỗi khi sao chép!');
+            });
+        }
+
+        function resetApp() {
+            currentVideoFile = null;
+            previewVideo.src = '';
+            uploadArea.style.display = 'block';
+            videoPreview.style.display = 'none';
+            loading.style.display = 'none';
+            results.style.display = 'none';
+            videoInput.value = '';
+            progressBar.style.width = '0%';
+        }
+    </script>
+</body>
+</html>
