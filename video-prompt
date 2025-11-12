@@ -31,6 +31,36 @@
             margin-bottom: 30px;
         }
         
+        /* VÙNG NHẬP TOKEN */
+        .token-section {
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px solid #ff0000;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .token-input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ff0000;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 1rem;
+        }
+        .token-btn {
+            background: #ff0000;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 5px;
+        }
+
         /* Upload Area */
         .upload-area {
             background: rgba(255, 255, 255, 0.1);
@@ -170,6 +200,21 @@
             <p class="subtitle">Chuyển đổi video thành prompt AI chất lượng cao hoàn toàn miễn phí</p>
         </header>
 
+        <!-- 🔴 VÙNG NHẬP TOKEN -->
+        <div class="token-section">
+            <h3 style="color: #ff0000; margin-bottom: 15px;">🔑 NHẬP HUGGING FACE TOKEN</h3>
+            <p style="margin-bottom: 15px;">Để sử dụng tính năng AI thật, vui lòng nhập token của bạn:</p>
+            <!-- Ô NHẬP TOKEN - KHÔNG CÓ TOKEN MẶC ĐỊNH -->
+            <input type="password" id="hfToken" class="token-input" placeholder="Dán token của bạn vào đây (bắt đầu bằng hf_)">
+            <div>
+                <button class="token-btn" onclick="saveToken()">💾 Lưu Token</button>
+                <button class="token-btn" onclick="clearToken()" style="background: #666;">🗑️ Xóa Token</button>
+            </div>
+            <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
+                Token được lưu cục bộ trên trình duyệt của bạn - an toàn & bảo mật
+            </p>
+        </div>
+
         <!-- Upload Area -->
         <div class="upload-area" id="uploadArea">
             <div class="upload-icon">📁</div>
@@ -243,6 +288,34 @@
     </div>
 
     <script>
+        // 🔴 HÀM QUẢN LÝ TOKEN
+        function saveToken() {
+            const tokenInput = document.getElementById('hfToken');
+            const token = tokenInput.value;
+            
+            if (token && token.startsWith('hf_')) {
+                localStorage.setItem('hfToken', token);
+                alert('✅ Token đã được lưu thành công!');
+                tokenInput.value = '••••••••••••••••';
+            } else {
+                alert('❌ Token không hợp lệ! Token phải bắt đầu bằng "hf_"');
+            }
+        }
+
+        function clearToken() {
+            localStorage.removeItem('hfToken');
+            document.getElementById('hfToken').value = '';
+            alert('✅ Token đã được xóa!');
+        }
+
+        // Load token khi trang được tải
+        window.addEventListener('load', function() {
+            const savedToken = localStorage.getItem('hfToken');
+            if (savedToken) {
+                document.getElementById('hfToken').value = '••••••••••••••••';
+            }
+        });
+
         // Elements
         const uploadArea = document.getElementById('uploadArea');
         const videoInput = document.getElementById('videoInput');
@@ -312,6 +385,13 @@
         async function analyzeVideo() {
             if (!currentVideoFile) {
                 alert('Vui lòng chọn video trước!');
+                return;
+            }
+
+            // 🔴 KIỂM TRA TOKEN
+            const hfToken = localStorage.getItem('hfToken');
+            if (!hfToken) {
+                alert('❌ Vui lòng nhập Hugging Face Token trước khi phân tích!');
                 return;
             }
 
@@ -392,11 +472,6 @@
             loading.style.display = 'none';
             results.style.display = 'none';
             videoInput.value = '';
-        }
-
-        // Back to main page
-        function goBack() {
-            window.location.href = 'index.html';
         }
     </script>
 </body>
